@@ -11,5 +11,6 @@ final readonly class Badge
 {
     public function __construct(
         public string $value,
-    ) {}
+    ) {
+    }
 }

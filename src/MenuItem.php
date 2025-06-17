@@ -40,7 +40,7 @@ class MenuItem extends MenuElement
     ) {
         parent::__construct();
 
-        if($label !== null) {
+        if ($label !== null) {
             $this->setLabel($label);
         }
 
@@ -80,7 +80,7 @@ class MenuItem extends MenuElement
     {
         $this->setUrl(static fn (): string => $filler->getUrl());
 
-        if(!$this->hasLabel()) {
+        if (! $this->hasLabel()) {
             $this->setLabel($filler->getTitle());
         }
 
@@ -92,7 +92,7 @@ class MenuItem extends MenuElement
         ) ?? $filler->getIcon();
 
         $badge = $this->getCore()->getAttributes()->get(
-            fn() => Attributes::for($filler, Badge::class)->first()?->value,
+            fn () => Attributes::for($filler, Badge::class)->first()?->value,
             $filler::class,
             Badge::class,
             type: Attribute::TARGET_CLASS,
