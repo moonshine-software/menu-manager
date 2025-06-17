@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace MoonShine\MenuManager;
 
+use Attribute;
 use Closure;
 use Leeto\FastAttributes\Attributes;
 use MoonShine\Contracts\MenuManager\MenuFillerContract;
 use MoonShine\Contracts\UI\ActionButtonContract;
+use MoonShine\MenuManager\Attributes\Badge;
 use MoonShine\Support\Attributes\Icon;
 use MoonShine\UI\Components\ActionButton;
 use MoonShine\UI\Traits\WithBadge;
 use Throwable;
 
 /**
- * @method static static make(Closure|string $label, Closure|MenuFillerContract|string $filler, string $icon = null, Closure|bool $blank = false)
+ * @method static static make(Closure|MenuFillerContract|string $filler, Closure|string $label = null, string $icon = null, Closure|bool $blank = false)
  */
 class MenuItem extends MenuElement
 {
@@ -31,14 +33,16 @@ class MenuItem extends MenuElement
     protected ActionButtonContract $actionButton;
 
     final public function __construct(
-        Closure|string $label,
         protected Closure|MenuFillerContract|string $filler,
+        Closure|string|null $label = null,
         ?string $icon = null,
         Closure|bool $blank = false
     ) {
         parent::__construct();
 
-        $this->setLabel($label);
+        if($label !== null) {
+            $this->setLabel($label);
+        }
 
         if ($icon) {
             $this->icon($icon);
@@ -62,7 +66,7 @@ class MenuItem extends MenuElement
 
         $this->blank($blank);
 
-        $this->actionButton = ActionButton::make($label);
+        $this->actionButton = ActionButton::make($this->getLabel());
     }
 
     public function changeButton(Closure $callback): static
@@ -76,15 +80,27 @@ class MenuItem extends MenuElement
     {
         $this->setUrl(static fn (): string => $filler->getUrl());
 
+        if(!$this->hasLabel()) {
+            $this->setLabel($filler->getTitle());
+        }
+
         $icon = $this->getCore()->getAttributes()->get(
             default: fn (): ?string => Attributes::for($filler, Icon::class)->first('icon'),
             target: $filler::class,
             attribute: Icon::class,
             column: [0 => 'icon']
-        );
+        ) ?? $filler->getIcon();
 
-        if (method_exists($filler, 'getBadge')) {
-            $this->badge(static fn () => $filler->getBadge());
+        $badge = $this->getCore()->getAttributes()->get(
+            fn() => Attributes::for($filler, Badge::class)->first()?->value,
+            $filler::class,
+            Badge::class,
+            type: Attribute::TARGET_CLASS,
+            column: [0 => 'value']
+        ) ?? $filler->getBadge();
+
+        if ($badge !== null) {
+            $this->badge(static fn () => $badge);
         }
 
         if (! \is_null($icon) && $this->getIconValue() === '') {
