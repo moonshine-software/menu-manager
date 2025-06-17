@@ -100,7 +100,7 @@ class MenuItem extends MenuElement
         ) ?? $filler->getBadge();
 
         if ($badge !== null) {
-            $this->badge(static fn () => $badge);
+            $this->badge(static fn (): mixed => $badge);
         }
 
         if (! \is_null($icon) && $this->getIconValue() === '') {
