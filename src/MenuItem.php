@@ -9,6 +9,7 @@ use Closure;
 use Leeto\FastAttributes\Attributes;
 use MoonShine\Contracts\MenuManager\MenuFillerContract;
 use MoonShine\Contracts\UI\ActionButtonContract;
+use MoonShine\Contracts\UI\WithBadgeContract;
 use MoonShine\MenuManager\Attributes\Badge;
 use MoonShine\Support\Attributes\Icon;
 use MoonShine\UI\Components\ActionButton;
@@ -18,7 +19,7 @@ use Throwable;
 /**
  * @method static static make(Closure|MenuFillerContract|string $filler, Closure|string $label = null, string $icon = null, Closure|bool $blank = false)
  */
-class MenuItem extends MenuElement
+class MenuItem extends MenuElement implements WithBadgeContract
 {
     use WithBadge;
 
