@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MoonShine\MenuManager;
 
 use Closure;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Macroable;
 use MoonShine\Contracts\Core\HasViewRendererContract;
@@ -57,7 +58,7 @@ abstract class MenuElement implements MenuElementContract, HasViewRendererContra
             'type' => class_basename($this),
             'attributes' => $this->getAttributes(),
             'label' => $this->getLabel(),
-            'previewLabel' => str($this->getLabel())->limit(2),
+            'previewLabel' => Str::of($this->getLabel())->limit(2),
             'icon' => $this->getIcon(6),
             'isActive' => $this->isActive(),
             'top' => $this->isTopMode(),

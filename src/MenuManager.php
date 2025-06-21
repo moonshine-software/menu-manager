@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MoonShine\MenuManager;
 
 use Closure;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Conditionable;
 use MoonShine\Contracts\MenuManager\MenuElementContract;
 use MoonShine\Contracts\MenuManager\MenuElementsContract;
@@ -38,7 +39,7 @@ final class MenuManager implements MenuManagerContract
 
     public function remove(Closure $condition): static
     {
-        $this->items = collect($this->items)
+        $this->items = Collection::make($this->items)
             ->reject($condition)
             ->toArray();
 

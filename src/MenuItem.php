@@ -6,6 +6,7 @@ namespace MoonShine\MenuManager;
 
 use Attribute;
 use Closure;
+use Illuminate\Support\Str;
 use Leeto\FastAttributes\Attributes;
 use MoonShine\Contracts\MenuManager\MenuFillerContract;
 use MoonShine\Contracts\UI\ActionButtonContract;
@@ -233,7 +234,7 @@ class MenuItem extends MenuElement implements WithBadgeContract
             ->customView('moonshine::components.menu.item-link', [
                 'url' => $this->getUrl(),
                 'label' => $this->getLabel(),
-                'previewLabel' => str($this->getLabel())->limit(2),
+                'previewLabel' => Str::of($this->getLabel())->limit(2),
                 'icon' => $this->getIcon(6),
                 'top' => $this->isTopMode(),
             ]);
